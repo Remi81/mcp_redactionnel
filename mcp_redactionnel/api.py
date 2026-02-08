@@ -61,8 +61,10 @@ class RedactionRequest(BaseModel):
         'text',
         example='text',
         description=(
-            "Output format: 'text' (plain French article: paragraphs, no HTML/Markdown, "
-            "respects meta like length/tone) or 'html' (accessible HTML fragment). Default 'text'."
+            "Output format: 'text' (plain French article: "
+            "paragraphs, no HTML/Markdown, respects meta like "
+            "length/tone) or 'html' (accessible HTML fragment). "
+            "Default 'text'."
         ),
     )
 

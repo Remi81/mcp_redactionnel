@@ -55,9 +55,9 @@ def main():
         
         # Comptage
         line_count = result.count('\n')
-        print(f"\n📊 Statistiques:")
-        print(f"  Longueur totale: {len(result)} caractères")
-        print(f"  Nombre de sauts de ligne: {line_count}")
+        print("\n📊 Statistiques:")
+        print("  Longueur totale:", len(result), "caractères")
+        print("  Nombre de sauts de ligne:", line_count)
         
         # Sauvegarder un artefact local dans `tests/output/`
         # (ignoré par git) pour inspection locale

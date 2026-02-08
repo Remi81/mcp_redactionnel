@@ -85,8 +85,12 @@ class MistralProvider(GenericHTTPProvider):
         super().__init__(config)
 
     def generate(self, prompt: str, **kwargs) -> str:
-        # Build payload using Python dicts to avoid JSON template rendering pitfalls
-        model = getattr(self.config, 'model', None) or kwargs.get('model') or 'mistral-small-latest'
+        # Build payload using Python dicts to avoid pitfalls
+        model = (
+            getattr(self.config, 'model', None)
+            or kwargs.get('model')
+            or 'mistral-small-latest'
+        )
         payload = {
             'model': model,
             'messages': [{'role': 'user', 'content': prompt}],
