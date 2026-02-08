@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -47,6 +49,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -67,10 +71,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run gitleaks scan
         uses: zricethezav/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: --redact --report-path=gitleaks-report.json --exit-code=1
+# Note: gitleaks-action v2 uses environment variables (GITLEAKS_*) and does not accept `with: args:` inputs —
+# the action will run with sensible defaults for PR scanning. If you need to customize behavior, set GITLEAKS_* env vars.
