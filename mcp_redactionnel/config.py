@@ -1,6 +1,8 @@
-from typing import Dict, Any, Optional
-from pydantic import BaseModel
+from typing import Dict, Optional
+
 import yaml
+from pydantic import BaseModel
+
 
 class ProviderConfig(BaseModel):
     type: str
@@ -10,15 +12,16 @@ class ProviderConfig(BaseModel):
     body_template: Optional[str] = None
     response_path: Optional[str] = None
 
+
 class Settings(BaseModel):
     providers: Dict[str, ProviderConfig] = {}
 
     @classmethod
     def load(cls, path: str):
-        with open(path, 'r') as f:
+        with open(path, "r") as f:
             data = yaml.safe_load(f) or {}
         # Normalize providers
         providers = {}
-        for k, v in data.get('providers', {}).items():
+        for k, v in data.get("providers", {}).items():
             providers[k] = ProviderConfig(**v)
         return cls(providers=providers)

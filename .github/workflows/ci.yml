@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main, master ]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   test:
     name: Tests
@@ -13,11 +17,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+
+      - name: Create test config
+        run: cp config.example.yaml config.yaml
 
       - name: Cache pip
         uses: actions/cache@v4
@@ -30,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Install package
+        run: pip install -e .
+
       - name: Run tests
         run: pytest -q
 
@@ -40,6 +52,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -60,8 +74,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run gitleaks scan
         uses: zricethezav/gitleaks-action@v2
-        with:
-          args: --redact --report-path=gitleaks-report.json --exit-code=1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# Note: gitleaks-action v2 uses environment variables (GITLEAKS_*) and does not accept `with: args:` inputs —
+# the action will run with sensible defaults for PR scanning. If you need to customize behavior, set GITLEAKS_* env vars.
