@@ -44,8 +44,9 @@ def redaction(provider: BaseProvider, sujet: str, sources: list | None = None, m
     # If HTML requested, prefix an instruction that asks for accessible HTML output
     if format == 'html':
         html_instr = (
-            "Retourne uniquement un fragment HTML accessible (balises sémantiques, titres, paragraphes, listes si besoin, et attributs ARIA appropriés). "
-            "Ne fournis pas de page complète ni de styles CSS externes. "
+            "Retourne uniquement un fragment HTML accessible (balises sémantiques, titres, paragraphes, "
+            "listes si besoin, et attributs ARIA appropriés)."
+            " Ne fournis pas de page complète ni de styles CSS externes."
         )
         template = html_instr + "\n" + template
 

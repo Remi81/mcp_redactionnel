@@ -2,7 +2,13 @@ def test_clean_html_fragment():
     from mcp_redactionnel.service import _clean_html_fragment
 
     # Test 1: Remove fences with literal \n sequences
-    raw = r"```html\n<article>\n <p>Bonjour</p>\n</article>\n```"
+    raw = (
+        r"```html\n"
+        r"<article>\n"
+        r" <p>Bonjour</p>\n"
+        r"</article>\n"
+        r"```"
+    )
     cleaned = _clean_html_fragment(raw)
     assert cleaned.startswith('<article')
     assert '```' not in cleaned
@@ -21,7 +27,13 @@ def test_clean_html_fragment():
     assert r'\"' not in cleaned3
     
     # Test 4: Real-world Mistral output simulation
-    raw4 = r'```html\n<article aria-labelledby=\"title\">\n  <h1 id=\"title\">Test</h1>\n</article>\n```'
+    raw4 = (
+        r"```html\n"
+        r"<article aria-labelledby=\"title\">\n"
+        r"  <h1 id=\"title\">Test</h1>\n"
+        r"</article>\n"
+        r"```"
+    )
     cleaned4 = _clean_html_fragment(raw4)
     assert cleaned4.startswith('<article')
     assert '"title"' in cleaned4

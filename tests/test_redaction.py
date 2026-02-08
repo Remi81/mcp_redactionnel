@@ -1,4 +1,3 @@
-import pytest
 from mcp_redactionnel.service import redaction_by_name, mise_en_forme_by_name, list_providers
 
 

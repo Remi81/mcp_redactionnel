@@ -7,15 +7,27 @@ from .service import list_providers, redaction_by_name, mise_en_forme_by_name
 
 # OpenAPI / Swagger metadata
 tags_metadata = [
-    {"name": "providers", "description": "Lister et découvrir les providers configurés."},
-    {"name": "rédaction", "description": "Endpoints pour générer du contenu rédigé via un provider IA."},
-    {"name": "mise_en_forme", "description": "Endpoints pour transformer un texte en HTML accessible."},
+    {
+        "name": "providers",
+        "description": "Lister et découvrir les providers configurés.",
+    },
+    {
+        "name": "rédaction",
+        "description": "Endpoints pour générer du contenu rédigé via un provider IA.",
+    },
+    {
+        "name": "mise_en_forme",
+        "description": "Endpoints pour transformer un texte en HTML accessible.",
+    },
 ]
 
 app = FastAPI(
     title="MCP Rédactionnel HTTP API",
     version="0.1.0",
-    description="Service local pour générer et mettre en forme du contenu via providers d'IA (Mistral, Ollama, ...). Utilise `config.yaml` pour configurer les providers.",
+    description=(
+        "Service local pour générer et mettre en forme du contenu via providers d'IA "
+        "(Mistral, Ollama, ...). Utilise `config.yaml` pour configurer les providers."
+    ),
     openapi_tags=tags_metadata,
     docs_url="/docs",
     redoc_url="/redoc",
@@ -41,7 +53,14 @@ class RedactionRequest(BaseModel):
     sujet: str = Field(..., example="Qu'est-ce que l'économie circulaire ?")
     sources: Optional[List[str]] = Field(None, example=["https://example.com/article"])
     meta: Optional[dict] = Field(None, example={"tone": "formel", "length": "400"})
-    format: Optional[str] = Field('text', example='text', description="Output format: 'text' (plain French article: paragraphs, no HTML/Markdown, respects meta like length/tone) or 'html' (accessible HTML fragment). Default 'text'.")
+    format: Optional[str] = Field(
+        'text',
+        example='text',
+        description=(
+            "Output format: 'text' (plain French article: paragraphs, no HTML/Markdown, "
+            "respects meta like length/tone) or 'html' (accessible HTML fragment). Default 'text'."
+        ),
+    )
 
     class Config:
         schema_extra = {

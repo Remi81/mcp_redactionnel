@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """Test final du nettoyage HTML avec un appel réel à Mistral"""
+import os
 import sys
+import traceback
 from pathlib import Path
 
 # Add project to path
@@ -66,8 +68,7 @@ def main():
             sys.exit(1)
             
     except Exception as e:
-        print(f"\n❌ ERREUR: {e}")
-        import traceback
+        print("\n❌ ERREUR:", e)
         traceback.print_exc()
         sys.exit(2)
 

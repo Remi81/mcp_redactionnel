@@ -1,5 +1,3 @@
-import re
-
 p = 'test.html'
 s = open(p, 'r', encoding='utf-8').read()
 print('RAW preview (first 400 chars):')

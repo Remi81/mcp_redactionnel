@@ -1,4 +1,3 @@
-import pytest
 from mcp_redactionnel.service import redaction, mise_en_forme
 
 class DummyProvider:

@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 import httpx
 from jinja2 import Template
 from .config import ProviderConfig
@@ -39,14 +39,21 @@ class GenericHTTPProvider(BaseProvider):
         headers = {k: Template(v).render(**kwargs) for k, v in (self.config.headers or {}).items()}
 
         # Try to send as JSON when the template renders valid JSON
-        request_kwargs = {"headers": headers, "timeout": 30.0}
+        request_kwargs = {
+            "headers": headers,
+            "timeout": 30.0,
+        }
         try:
             json_body = json.loads(body)
-            request_kwargs['json'] = json_body
+            request_kwargs["json"] = json_body
         except Exception:
-            request_kwargs['content'] = body
+            request_kwargs["content"] = body
 
-        resp = httpx.request(self.config.method, self.config.endpoint, **request_kwargs)
+        resp = httpx.request(
+            self.config.method,
+            self.config.endpoint,
+            **request_kwargs,
+        )
         # On error, include response body to ease debugging
         try:
             resp.raise_for_status()
