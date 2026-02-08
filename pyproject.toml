@@ -3,14 +3,14 @@ name = "mcp_redactionnel"
 version = "0.1.0"
 description = "MCP service for rédactionnel with pluggable AI providers"
 readme = "README.md"
-license = "MIT"
+license = {text = "MIT"}
 requires-python = ">=3.11"
-
-[project.dependencies]
-httpx = "^0.24"
-pydantic = "^1.10"
-jinja2 = "^3.1"
-pyyaml = "^6.0"
+dependencies = [
+    "httpx>=0.24",
+    "pydantic>=1.10",
+    "jinja2>=3.1",
+    "pyyaml>=6.0",
+]
 
 [tool.pytest.ini_options]
 addopts = "-q"
