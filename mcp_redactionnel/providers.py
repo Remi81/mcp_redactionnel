@@ -97,8 +97,16 @@ class MistralProvider(GenericHTTPProvider):
             'max_tokens': kwargs.get('max_tokens', 512),
             'stream': False,
         }
-        headers = {k: Template(v).render(**kwargs) for k, v in (self.config.headers or {}).items()}
-        resp = httpx.post(self.config.endpoint, headers=headers, json=payload, timeout=30.0)
+        headers = {
+            k: Template(v).render(**kwargs)
+            for k, v in (self.config.headers or {}).items()
+        }
+        resp = httpx.post(
+            self.config.endpoint,
+            headers=headers,
+            json=payload,
+            timeout=30.0,
+        )
         try:
             resp.raise_for_status()
         except httpx.HTTPStatusError as exc:

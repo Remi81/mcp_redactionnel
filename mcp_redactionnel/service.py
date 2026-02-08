@@ -56,7 +56,11 @@ def redaction(provider: BaseProvider, sujet: str, sources: list | None = None, m
         "{{ sources }}", str(sources or "")
     )
     out = provider.generate(
-        rendered, sujet=sujet, sources=sources, meta=meta, format=format
+        rendered,
+        sujet=sujet,
+        sources=sources,
+        meta=meta,
+        format=format,
     )
     # If HTML output requested, apply the same cleaning to ensure it's storable
     if format == 'html':
