@@ -1,5 +1,8 @@
-from mcp_redactionnel.service import (list_providers, mise_en_forme_by_name,
-                                      redaction_by_name)
+from mcp_redactionnel.service import (
+    list_providers,
+    mise_en_forme_by_name,
+    redaction_by_name,
+)
 
 
 class DummyProvider:

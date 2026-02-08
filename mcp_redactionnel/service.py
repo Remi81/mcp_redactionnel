@@ -4,8 +4,12 @@ from typing import Dict
 import yaml
 
 from .config import Settings
-from .providers import (BaseProvider, GenericHTTPProvider, MistralProvider,
-                        OllamaProvider)
+from .providers import (
+    BaseProvider,
+    GenericHTTPProvider,
+    MistralProvider,
+    OllamaProvider,
+)
 
 _prompts = None
 
