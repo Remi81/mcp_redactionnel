@@ -1,13 +1,11 @@
 from pathlib import Path
 from typing import Dict
+
 import yaml
+
 from .config import Settings
-from .providers import (
-    GenericHTTPProvider,
-    OllamaProvider,
-    MistralProvider,
-    BaseProvider,
-)
+from .providers import (BaseProvider, GenericHTTPProvider, MistralProvider,
+                        OllamaProvider)
 
 _prompts = None
 

@@ -1,4 +1,5 @@
-from mcp_redactionnel.service import redaction_by_name, mise_en_forme_by_name, list_providers
+from mcp_redactionnel.service import (list_providers, mise_en_forme_by_name,
+                                      redaction_by_name)
 
 
 class DummyProvider:
@@ -17,7 +18,10 @@ def test_redaction_by_name(monkeypatch, tmp_path):
     )
 
     # Patch ProviderManager.get to return our dummy provider
-    monkeypatch.setattr("mcp_redactionnel.service.ProviderManager.get", lambda self, name: DummyProvider())
+    monkeypatch.setattr(
+        "mcp_redactionnel.service.ProviderManager.get",
+        lambda self, name: DummyProvider(),
+    )
 
     out = redaction_by_name("dummy", "Sujet de test", config_path=str(cfg))
     assert out.startswith("DUMMY:")
@@ -30,7 +34,10 @@ def test_mise_en_forme_by_name(monkeypatch, tmp_path):
         "providers:\n  dummy:\n    type: generic\n    endpoint: 'http://example'\n"
     )
 
-    monkeypatch.setattr("mcp_redactionnel.service.ProviderManager.get", lambda self, name: DummyProvider())
+    monkeypatch.setattr(
+        "mcp_redactionnel.service.ProviderManager.get",
+        lambda self, name: DummyProvider(),
+    )
 
     out = mise_en_forme_by_name("dummy", "Un texte à formater", config_path=str(cfg))
     assert out.startswith("DUMMY:")
@@ -61,15 +68,11 @@ def test_redaction_html_prompt(monkeypatch, tmp_path):
         lambda self, name: dp,
     )
 
-    out = redaction_by_name(
-        "dummy", "Sujet texte", config_path=str(cfg), format='text'
-    )
+    out = redaction_by_name("dummy", "Sujet texte", config_path=str(cfg), format="text")
     assert out.startswith("DUMMY:")
     # Ensure the prompt requests plain text (no HTML)
     # and mentions paragraphs or 'sans balises'
     assert any(
-        'sans balises' in call[0]
-        or 'paragraph' in call[0]
-        or 'paragraphes' in call[0]
+        "sans balises" in call[0] or "paragraph" in call[0] or "paragraphes" in call[0]
         for call in dp.calls
     )

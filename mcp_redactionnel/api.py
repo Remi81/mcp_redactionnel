@@ -1,9 +1,10 @@
+from typing import List, Optional
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from typing import List, Optional
 
-from .service import list_providers, redaction_by_name, mise_en_forme_by_name
+from .service import list_providers, mise_en_forme_by_name, redaction_by_name
 
 # OpenAPI / Swagger metadata
 tags_metadata = [
@@ -51,15 +52,11 @@ class ProviderListResponse(BaseModel):
 class RedactionRequest(BaseModel):
     provider: str = Field(..., example="mistral_api")
     sujet: str = Field(..., example="Qu'est-ce que l'économie circulaire ?")
-    sources: Optional[List[str]] = Field(
-        None, example=["https://example.com/article"]
-    )
-    meta: Optional[dict] = Field(
-        None, example={"tone": "formel", "length": "400"}
-    )
+    sources: Optional[List[str]] = Field(None, example=["https://example.com/article"])
+    meta: Optional[dict] = Field(None, example={"tone": "formel", "length": "400"})
     format: Optional[str] = Field(
-        'text',
-        example='text',
+        "text",
+        example="text",
         description=(
             "Output format: 'text' (plain French article: "
             "paragraphs, no HTML/Markdown, respects meta like "
@@ -75,7 +72,7 @@ class RedactionRequest(BaseModel):
                 "sujet": "Qu'est-ce que l'économie circulaire ?",
                 "sources": ["https://example.com/article"],
                 "meta": {"tone": "formel"},
-                "format": "html"
+                "format": "html",
             }
         }
 
@@ -108,7 +105,7 @@ class MiseEnFormeResponse(BaseModel):
         "de configuration (par défaut `config.yaml`)."
     ),
 )
-def get_providers(config: str = 'config.yaml'):
+def get_providers(config: str = "config.yaml"):
     """Obtenir la liste des providers configurés.
 
     - config: chemin vers le fichier de configuration YAML
@@ -126,7 +123,7 @@ def get_providers(config: str = 'config.yaml'):
         "Utilise le prompt configuré (texte ou HTML accessible)."
     ),
 )
-def post_redaction(req: RedactionRequest, config: str = 'config.yaml'):
+def post_redaction(req: RedactionRequest, config: str = "config.yaml"):
     """Lance une rédaction via le provider indiqué.
 
     Exemple d'utilisation depuis Postman/Bruno:
@@ -142,7 +139,7 @@ def post_redaction(req: RedactionRequest, config: str = 'config.yaml'):
             sources=req.sources,
             meta=req.meta,
             config_path=config,
-            format=(req.format or 'text'),
+            format=(req.format or "text"),
         )
         return {"result": out}
     except Exception as e:
@@ -159,7 +156,7 @@ def post_redaction(req: RedactionRequest, config: str = 'config.yaml'):
         "(balises sémantiques, ARIA, structure)."
     ),
 )
-def post_mise_en_forme(req: MiseEnFormeRequest, config: str = 'config.yaml'):
+def post_mise_en_forme(req: MiseEnFormeRequest, config: str = "config.yaml"):
     """Lance la mise en forme d'un texte en HTML accessible.
 
     Exemple:

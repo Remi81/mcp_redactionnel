@@ -5,7 +5,7 @@
 Les modèles d'IA (Mistral notamment) ont tendance à générer du HTML avec des artefacts qui empêchent l'insertion directe en base de données :
 
 1. **Fences Markdown** : ` ```html ... ``` `
-2. **Séquences littérales échappées** : 
+2. **Séquences littérales échappées** :
    - `\n` au lieu de vrais sauts de ligne (caractère newline)
    - `\"` au lieu de `"`
    - `\t` au lieu de tabulations
@@ -50,14 +50,14 @@ def _clean_html_fragment(s: str) -> str:
     m = re.search(r"^```(?:html)?\s*(.*)\s*```$", text, flags=re.S)
     if m:
         text = m.group(1).strip()
-    
+
     # 2. Remplacer les séquences LITTÉRALES (2 caractères : \ + n)
     #    par de VRAIS caractères (newline, tab, quote)
     text = text.replace(r'\n', '\n')   # literal \n → real newline
     text = text.replace(r'\t', '\t')   # literal \t → real tab
     text = text.replace(r'\"', '"')    # literal \" → real quote
     text = text.replace(r"\'", "'")    # literal \' → real quote
-    
+
     return text.strip()
 ```
 
