@@ -12,7 +12,7 @@ from .providers import (
 _prompts = None
 
 
-def load_prompts(path: str = ''):
+def load_prompts(path: str = ""):
     global _prompts
     if _prompts is None:
         path = path or str(Path(__file__).parent / "prompts.yaml")
@@ -52,7 +52,10 @@ def redaction(
     meta: dict | None = None,
     format: str = "text",
 ) -> str:
-    """Generate a redaction. If format=='html', instruct the model to return accessible HTML fragment."""
+    """
+    Generate a redaction.
+    If format=='html', instruct the model to return accessible HTML.
+    """
     prompts = load_prompts()
     template = prompts.get(
         "redaction", "Rédige un texte sur: {{ sujet }}. Sources: {{ sources }}"

@@ -15,3 +15,14 @@ dependencies = [
 [tool.pytest.ini_options]
 addopts = "-q"
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+# Activer les règles de style pycodestyle (E/W) et Pyflakes (F)
+select = ["E", "F", "W"]
+# E501 est inclus dans "E" et détecte les lignes trop longues
+
+[tool.flake8]
+max-line-length = 88

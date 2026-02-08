@@ -3,6 +3,7 @@ import httpx
 from jinja2 import Template
 from .config import ProviderConfig
 
+
 class BaseProvider:
     def generate(self, prompt: str, **kwargs) -> str:
         raise NotImplementedError
@@ -11,7 +12,7 @@ class BaseProvider:
 def _extract_path(obj: Any, path: Optional[str]) -> Optional[str]:
     if not path:
         return None
-    parts = path.split('.')
+    parts = path.split(".")
     cur = obj
     try:
         for p in parts:
@@ -27,6 +28,7 @@ def _extract_path(obj: Any, path: Optional[str]) -> Optional[str]:
     # fallback to stringify
     return None if cur is None else str(cur)
 
+
 class GenericHTTPProvider(BaseProvider):
     def __init__(self, config: ProviderConfig):
         self.config = config
@@ -36,7 +38,10 @@ class GenericHTTPProvider(BaseProvider):
 
         template = self.config.body_template or '{"prompt": "{{ prompt }}"}'
         body = Template(template).render(prompt=prompt, **kwargs)
-        headers = {k: Template(v).render(**kwargs) for k, v in (self.config.headers or {}).items()}
+        headers = {
+            k: Template(v).render(**kwargs)
+            for k, v in (self.config.headers or {}).items()
+        }
 
         # Try to send as JSON when the template renders valid JSON
         request_kwargs = {
@@ -64,8 +69,7 @@ class GenericHTTPProvider(BaseProvider):
             except Exception:
                 content = resp.text
             raise RuntimeError(
-                f"HTTP {resp.status_code} from "
-                f"{self.config.endpoint}: {content}"
+                f"HTTP {resp.status_code} from {self.config.endpoint}: {content}"
             ) from exc
 
         try:
@@ -75,10 +79,13 @@ class GenericHTTPProvider(BaseProvider):
         extracted = _extract_path(data, self.config.response_path)
         return extracted or (resp.text if isinstance(resp.text, str) else str(data))
 
+
 class OllamaProvider(GenericHTTPProvider):
     def __init__(self, config: ProviderConfig):
-        # Ollama usually expects JSON with 'prompt' and returns 'choices[0].message.content' or similar
+        # Ollama usually expects JSON with 'prompt' and returns
+        # 'choices[0].message.content' or similar
         super().__init__(config)
+
 
 class MistralProvider(GenericHTTPProvider):
     def __init__(self, config: ProviderConfig):
@@ -87,15 +94,15 @@ class MistralProvider(GenericHTTPProvider):
     def generate(self, prompt: str, **kwargs) -> str:
         # Build payload using Python dicts to avoid pitfalls
         model = (
-            getattr(self.config, 'model', None)
-            or kwargs.get('model')
-            or 'mistral-small-latest'
+            getattr(self.config, "model", None)
+            or kwargs.get("model")
+            or "mistral-small-latest"
         )
         payload = {
-            'model': model,
-            'messages': [{'role': 'user', 'content': prompt}],
-            'max_tokens': kwargs.get('max_tokens', 512),
-            'stream': False,
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": kwargs.get("max_tokens", 512),
+            "stream": False,
         }
         headers = {
             k: Template(v).render(**kwargs)
@@ -116,8 +123,7 @@ class MistralProvider(GenericHTTPProvider):
             except Exception:
                 content = resp.text
             raise RuntimeError(
-                f"HTTP {resp.status_code} from "
-                f"{self.config.endpoint}: {content}"
+                f"HTTP {resp.status_code} from {self.config.endpoint}: {content}"
             ) from exc
 
         try:
