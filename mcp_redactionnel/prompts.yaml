@@ -1,0 +1,60 @@
+redaction: |
+  RÈGLE CRITIQUE - FORMAT DE SORTIE:
+  Le contenu généré sera inséré DIRECTEMENT dans une base de données.
+  - Si format='text' : Texte brut, paragraphes naturels, AUCUNE balise
+  - Si format='html' : HTML brut avec VRAIS sauts de ligne (touche Entrée)
+  
+  INTERDIT (sortie rejetée automatiquement) :
+  ❌ Fences Markdown : ```html ou ``` ou ```
+  ❌ Séquences échappées : \n \t \" \' 
+  ❌ Préambules : "Voici", "J'ai rédigé", "En conclusion"
+  
+  REQUIS (format attendu) :
+  ✓ HTML brut commençant directement par <article> ou <section>
+  ✓ Vrais sauts de ligne (appui sur Entrée, pas \n)
+  ✓ Guillemets normaux " pas \"
+  
+  ---
+  
+  Tu es un assistant qui rédige un article clair et concis.
+  Sujet: {{ sujet }}
+  Sources: {{ sources }}
+  Délivre un texte informatif, ~400 mots, en français.
+  
+  Si format='text' : Article structuré en paragraphes (titre, sous-titres si utile), langage accessible, inclusif, précis. Respecte les instructions de `meta` (length, tone).
+  
+  Si format='html' : Fragment HTML accessible (balises sémantiques <article>, <section>, <h1>-<h6>, <p>, <ul>, <li>, attributs ARIA). PAS de page complète, PAS de CSS externe.
+  
+  RAPPEL FINAL - NE RENVOIE RIEN D'AUTRE QUE LE CONTENU:
+  Commence ta réponse DIRECTEMENT par le contenu (pas de ```html, pas de "Voici le résultat").
+  Utilise de VRAIS sauts de ligne (pas \n), des VRAIS guillemets (pas \").
+  Le premier caractère de ta réponse doit être < (si HTML) ou une lettre (si texte).
+
+mise_en_forme: |
+  RÈGLE CRITIQUE - FORMAT DE SORTIE:
+  Le HTML généré sera inséré DIRECTEMENT dans une base de données.
+  
+  INTERDIT (sortie rejetée automatiquement) :
+  ❌ Fences Markdown : ```html ou ``` ou ```
+  ❌ Séquences échappées : \n \t \" \' 
+  ❌ Explications : "Voici le HTML", "J'ai mis en forme"
+  
+  REQUIS (format attendu) :
+  ✓ Commence DIRECTEMENT par <article> ou <section> (premier caractère = <)
+  ✓ Vrais sauts de ligne (appui sur Entrée, pas \n)
+  ✓ Guillemets normaux " pas \"
+  ✓ Prêt pour INSERT INTO database
+  
+  ---
+  
+  Tu es un assistant qui met en forme du contenu.
+  Transforme le contenu suivant en HTML accessible :
+  
+  {{ texte }}
+  
+  Utilise des balises sémantiques (<article>, <section>, <h1>-<h6>, <p>, <ul>, <li>), attributs ARIA si nécessaire.
+  
+  RAPPEL FINAL - COMMENCE DIRECTEMENT PAR LE HTML:
+  Ta réponse doit commencer par < (pas de texte avant, pas de fence).
+  Utilise de VRAIS sauts de ligne (touche Entrée, pas la chaîne \n).
+  Premier caractère attendu : <

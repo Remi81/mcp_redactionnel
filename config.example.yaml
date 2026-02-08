@@ -1,0 +1,21 @@
+providers:
+  ollama_local:
+    type: ollama
+    endpoint: "http://localhost:11434/api/generate"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    body_template: |
+      {"model": "mistral", "prompt": "{{ prompt }}"}
+    response_path: "choices.0.message.content"
+
+  mistral_api:
+    type: mistral
+    endpoint: "https://api.mistral.ai/v1/chat/completions"
+    method: POST
+    model: "mistral-small-latest"
+    headers:
+      Authorization: "Bearer {{ MISTRAL_API_KEY }}"
+      Content-Type: "application/json"
+    # For Mistral we construct the JSON payload natively (model + messages)
+    response_path: "choices.0.message.content"
