@@ -29,6 +29,9 @@ print(s3[:1000])
 
 # Simple sanity check: ensure it begins with <
 if not s3.startswith('<'):
-    print('\n[Warning] cleaned content does not start with "<" — may not be valid HTML fragment')
+    print(
+        '\n[Warning] cleaned content does not start with "<" '
+        '— may not be valid HTML fragment'
+    )
 else:
     print('\n[OK] cleaned content looks like HTML fragment')

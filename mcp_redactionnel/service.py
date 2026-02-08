@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict
 import yaml
 from .config import Settings
 from .providers import GenericHTTPProvider, OllamaProvider, MistralProvider, BaseProvider
@@ -44,14 +44,19 @@ def redaction(provider: BaseProvider, sujet: str, sources: list | None = None, m
     # If HTML requested, prefix an instruction that asks for accessible HTML output
     if format == 'html':
         html_instr = (
-            "Retourne uniquement un fragment HTML accessible (balises sémantiques, titres, paragraphes, "
-            "listes si besoin, et attributs ARIA appropriés)."
-            " Ne fournis pas de page complète ni de styles CSS externes."
+            "Retourne uniquement un fragment HTML accessible "
+            "(balises sémantiques, titres, paragraphes, listes si besoin, "
+            "et attributs ARIA appropriés). "
+            "Ne fournis pas de page complète ni de styles CSS externes."
         )
         template = html_instr + "\n" + template
 
-    rendered = template.replace("{{ sujet }}", sujet).replace("{{ sources }}", str(sources or ""))
-    out = provider.generate(rendered, sujet=sujet, sources=sources, meta=meta, format=format)
+    rendered = template.replace("{{ sujet }}", sujet).replace(
+        "{{ sources }}", str(sources or "")
+    )
+    out = provider.generate(
+        rendered, sujet=sujet, sources=sources, meta=meta, format=format
+    )
     # If HTML output requested, apply the same cleaning to ensure it's storable
     if format == 'html':
         out = _clean_html_fragment(out)

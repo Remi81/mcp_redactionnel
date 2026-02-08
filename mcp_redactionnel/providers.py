@@ -63,7 +63,10 @@ class GenericHTTPProvider(BaseProvider):
                 content = resp.json()
             except Exception:
                 content = resp.text
-            raise RuntimeError(f"HTTP {resp.status_code} from {self.config.endpoint}: {content}") from exc
+            raise RuntimeError(
+                f"HTTP {resp.status_code} from "
+                f"{self.config.endpoint}: {content}"
+            ) from exc
 
         try:
             data = resp.json()
@@ -100,7 +103,10 @@ class MistralProvider(GenericHTTPProvider):
                 content = resp.json()
             except Exception:
                 content = resp.text
-            raise RuntimeError(f"HTTP {resp.status_code} from {self.config.endpoint}: {content}") from exc
+            raise RuntimeError(
+                f"HTTP {resp.status_code} from "
+                f"{self.config.endpoint}: {content}"
+            ) from exc
 
         try:
             data = resp.json()

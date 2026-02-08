@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from typing import List, Optional, Any
+from typing import List, Optional
 
 from .service import list_providers, redaction_by_name, mise_en_forme_by_name
 
@@ -51,8 +51,12 @@ class ProviderListResponse(BaseModel):
 class RedactionRequest(BaseModel):
     provider: str = Field(..., example="mistral_api")
     sujet: str = Field(..., example="Qu'est-ce que l'économie circulaire ?")
-    sources: Optional[List[str]] = Field(None, example=["https://example.com/article"])
-    meta: Optional[dict] = Field(None, example={"tone": "formel", "length": "400"})
+    sources: Optional[List[str]] = Field(
+        None, example=["https://example.com/article"]
+    )
+    meta: Optional[dict] = Field(
+        None, example={"tone": "formel", "length": "400"}
+    )
     format: Optional[str] = Field(
         'text',
         example='text',
@@ -92,7 +96,16 @@ class MiseEnFormeResponse(BaseModel):
     result: str = Field(..., example="<article>...</article>")
 
 
-@app.get("/providers", response_model=ProviderListResponse, tags=["providers"], summary="Liste des providers", description="Retourne la liste des providers définis dans le fichier de configuration (par défaut `config.yaml`).")
+@app.get(
+    "/providers",
+    response_model=ProviderListResponse,
+    tags=["providers"],
+    summary="Liste des providers",
+    description=(
+        "Retourne la liste des providers définis dans le fichier "
+        "de configuration (par défaut `config.yaml`)."
+    ),
+)
 def get_providers(config: str = 'config.yaml'):
     """Obtenir la liste des providers configurés.
 
@@ -106,7 +119,10 @@ def get_providers(config: str = 'config.yaml'):
     response_model=RedactionResponse,
     tags=["rédaction"],
     summary="Demander une rédaction",
-    description="Demande à un provider de rédiger un texte. Utilise le prompt configuré (texte ou HTML accessible).",
+    description=(
+        "Demande à un provider de rédiger un texte. "
+        "Utilise le prompt configuré (texte ou HTML accessible)."
+    ),
 )
 def post_redaction(req: RedactionRequest, config: str = 'config.yaml'):
     """Lance une rédaction via le provider indiqué.
@@ -118,7 +134,14 @@ def post_redaction(req: RedactionRequest, config: str = 'config.yaml'):
     Body: {"provider":"mistral_api","sujet":"Sujet"}
     """
     try:
-        out = redaction_by_name(req.provider, req.sujet, sources=req.sources, meta=req.meta, config_path=config, format=(req.format or 'text'))
+        out = redaction_by_name(
+            req.provider,
+            req.sujet,
+            sources=req.sources,
+            meta=req.meta,
+            config_path=config,
+            format=(req.format or 'text'),
+        )
         return {"result": out}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -129,7 +152,10 @@ def post_redaction(req: RedactionRequest, config: str = 'config.yaml'):
     response_model=MiseEnFormeResponse,
     tags=["mise_en_forme"],
     summary="Demander une mise en forme HTML",
-    description="Demande à un provider de transformer un texte en HTML accessible (balises sémantiques, ARIA, structure).",
+    description=(
+        "Demande à un provider de transformer un texte en HTML accessible "
+        "(balises sémantiques, ARIA, structure)."
+    ),
 )
 def post_mise_en_forme(req: MiseEnFormeRequest, config: str = 'config.yaml'):
     """Lance la mise en forme d'un texte en HTML accessible.
